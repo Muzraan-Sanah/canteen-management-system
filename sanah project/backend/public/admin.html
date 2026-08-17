@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Owner Dashboard</title>
+  <link rel="icon" type="image/png" sizes="194x194" href="https://i.postimg.cc/qBLNYw1g/icon-up.png">
+  <link rel="icon" href="https://i.postimg.cc/rsL1KCq7/LOGO.png" />
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Segoe UI', sans-serif;
+      transition: background 0.5s, color 0.5s;
+      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%;
+      animation: gradient 12s ease infinite;
+      color: #333;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .dark-mode {
+      background: #121212;
+      color: #eee;
+    }
+
+    .dashboard {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 1100px;
+      margin: auto;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .dark-mode .dashboard {
+      background: rgba(30, 30, 30, 0.9);
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .summary {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f4f4f4;
+    }
+
+    .dark-mode th {
+      background-color: #333;
+    }
+
+    .timestamp {
+      font-size: 0.85em;
+      color: gray;
+    }
+
+    .top-bar button {
+      margin-left: 10px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .logout-btn { background-color: #e53935; color: white; }
+    .toggle-btn { background-color: #1976d2; color: white; }
+    .export-btn { background-color: #43a047; color: white; }
+
+    .top-bar button:hover {
+      opacity: 0.9;
+    }
+
+    .section-title {
+      margin-top: 30px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .status-btn {
+      background-color: #ffa000;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .status-btn.completed {
+      background-color: #4caf50;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      margin-right: 10px;
+      font-weight: bold;
+      background-color: #ddd;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .tab-btn:hover {
+      background-color: #ccc;
+    }
+
+    .tab-btn.active-tab {
+      background-color: #1976d2;
+      color: white;
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      padding: 15px 25px;
+      background-color: #333;
+      color: white;
+      border-radius: 8px;
+      display: none;
+      z-index: 9999;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <div class="top-bar">
+      <h1>📋 Orders</h1>
+      <div>
+        <button class="export-btn" onclick="exportCSV()">Export CSV</button>
+        <button class="toggle-btn" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="summary" id="summary">📦 Total Orders: 0 | 💰 Total Revenue: ₹0</div>
+
+    <!-- Section Toggle -->
+    <div class="section-title">
+      <button onclick="showSection('food')" id="btn-food" class="tab-btn active-tab">🍽️ Food Orders</button>
+      <button onclick="showSection('print')" id="btn-print" class="tab-btn">🖨️ Print Orders</button>
+    </div>
+
+    <!-- Food Orders -->
+    <div id="section-food">
+      <table id="food-orders">
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Items</th><th>Total</th><th>Status</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <!-- Print Orders -->
+    <div id="section-print" style="display:none;">
+      <table id="print-orders">
+        <thead>
+          <tr><th>Name</th><th>Email</th><th>Pages</th><th>Total</th><th>Status</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast">🔔 New Order Received!</div>
+
+  <!-- Single Notification Sound -->
+  <audio id="notificationSound" src="https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3" preload="auto"></audio>
+
+  <!-- Socket.IO -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const token = sessionStorage.getItem("adminToken");
+    if (!token) {
+      alert("Access denied.");
+      window.location.href = "/admin-login.html";
+    }
+
+    const socket = io();
+    let orders = [];
+
+    function logout() {
+      sessionStorage.removeItem("adminToken");
+      window.location.href = "/admin-login.html";
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    function exportCSV() {
+      const rows = [["Type", "Name", "Email", "Details", "Total", "Status"]];
+      document.querySelectorAll("table tbody tr").forEach(tr => {
+        const cols = tr.querySelectorAll("td");
+        const section = tr.closest("table").id.includes("food") ? "Food" : "Print";
+        if (cols.length >= 5) {
+          const row = [
+            section,
+            cols[0].innerText.replace(/\n.*/, ""),
+            cols[1].innerText,
+            cols[2].innerText.replace(/\n/g, ", "),
+            cols[3].innerText.replace("₹", ""),
+            cols[4].innerText
+          ];
+          rows.push(row);
+        }
+      });
+
+      const csv = rows.map(r => r.join(",")).join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "canteen-orders.csv";
+      link.click();
+    }
+
+    async function fetchInitialOrders() {
+      const res = await fetch("/admin/orders?token=" + token);
+      orders = await res.json();
+      renderOrders();
+    }
+
+    function renderOrders() {
+      const foodBody = document.querySelector("#food-orders tbody");
+      const printBody = document.querySelector("#print-orders tbody");
+      const summary = document.getElementById("summary");
+
+      foodBody.innerHTML = "";
+      printBody.innerHTML = "";
+
+      let totalRevenue = 0;
+
+      [...orders].reverse().forEach((order, index) => {
+        const tr = document.createElement("tr");
+        const status = order.status || "Pending";
+        const statusBtn = `<button class="status-btn ${status === "Completed" ? "completed" : ""}" onclick="markCompleted(${orders.length - 1 - index})">${status}</button>`;
+
+        if (order.type === "food") {
+          const items = order.items.map(i => `${i.name} x${i.quantity} – ₹${i.quantity * i.price}`).join("<br>");
+          tr.innerHTML = `
+            <td>${order.name}<br><span class="timestamp">${order.time}</span></td>
+            <td>${order.email}</td>
+            <td>${items}</td>
+            <td>₹${order.total}</td>
+            <td>${statusBtn}</td>
+          `;
+          foodBody.appendChild(tr);
+        }
+
+        if (order.type === "print") {
+          tr.innerHTML = `
+            <td>${order.name}<br><span class="timestamp">${order.time}</span></td>
+            <td>${order.email}</td>
+            <td>${order.items[0]?.quantity || ""} pages</td>
+            <td>₹${order.total}</td>
+            <td>${statusBtn}</td>
+          `;
+          printBody.appendChild(tr);
+        }
+
+        totalRevenue += order.total;
+      });
+
+      summary.innerText = `📦 Total Orders: ${orders.length} | 💰 Total Revenue: ₹${totalRevenue}`;
+    }
+
+    function markCompleted(index) {
+      orders[index].status = "Completed";
+      renderOrders();
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.innerText = message;
+      toast.style.display = "block";
+      setTimeout(() => { toast.style.display = "none"; }, 4000);
+    }
+
+    function showSection(type) {
+      const foodSection = document.getElementById("section-food");
+      const printSection = document.getElementById("section-print");
+      const btnFood = document.getElementById("btn-food");
+      const btnPrint = document.getElementById("btn-print");
+
+      if (type === "food") {
+        foodSection.style.display = "block";
+        printSection.style.display = "none";
+        btnFood.classList.add("active-tab");
+        btnPrint.classList.remove("active-tab");
+      } else {
+        foodSection.style.display = "none";
+        printSection.style.display = "block";
+        btnPrint.classList.add("active-tab");
+        btnFood.classList.remove("active-tab");
+      }
+    }
+
+    socket.on("new-order", (order) => {
+      orders.push(order);
+      renderOrders();
+      showToast(`🔔 New ${order.type === "print" ? "Print" : "Food"} Order Received!`);
+      document.getElementById("notificationSound").play();
+    });
+
+    fetchInitialOrders();
+  </script>
+</body>
+</html>

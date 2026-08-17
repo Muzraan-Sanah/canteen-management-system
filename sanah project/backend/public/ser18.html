@@ -1,0 +1,141 @@
+<!DOCTYPE html> 
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KITS Cantoche - Services</title>
+    <link rel="icon" type="image/png" sizes="194x194" href="https://i.postimg.cc/qBLNYw1g/icon-up.png">
+    <style>
+        /* General Page Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Main Service Section */
+        .services-section {
+            padding: 30px;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        .services-section h2 {
+            font-size: 28px;
+            color: #444;
+            margin-bottom: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Service Grid Layout */
+        .service-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            justify-content: center;
+        }
+
+        /* Individual Service Box Styling */
+        .service-box {
+            background-color: #f9f9f9;
+            border: 2px solid #1abc9c;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 320px;
+            height: 320px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+        }
+
+        .service-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background-color: #f0f0f0;
+        }
+
+        /* Images in Service Boxes */
+        .service-box img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .service-box h3 {
+            font-size: 16px;
+            margin-top: 8px;
+            color: #222;
+            font-weight: 600;
+        }
+
+        .service-box p {
+            color: #555;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="services-section">
+        <h2 style="color: #222;">Our College Canteen Services</h2>
+        <div class="service-container">
+            <div class="service-box">
+                <img src="https://i.postimg.cc/VvVDmCjh/combo.avif" alt="Daily Meals">
+                <h3>Daily Meals</h3>
+                <p>Enjoy nutritious and hygienic meals prepared daily, including rice, curries, and roti.</p>
+            </div>
+            <div class="service-box">
+                <img src="https://i.postimg.cc/9QtZB9Dj/bev.webp" alt="Snacks & Beverages">
+                <h3>Snacks & Beverages</h3>
+                <p>A variety of snacks such as samosas, sandwiches, and fresh juices are available throughout the day.</p>
+            </div>
+            <div class="service-box">
+                <img src="https://i.postimg.cc/tCd54Jh7/pu.avif" alt="Puffs">
+                <h3>Puffs & Savory Items</h3>
+                <p>Delicious and crispy puffs, available in veg and non-veg options, served fresh daily.</p>
+            </div>
+            <div class="service-box">
+                <img src="https://i.postimg.cc/vZHW8zYS/break.webp" alt="Breakfast">
+                <h3>Breakfast Options</h3>
+                <p>Start your day with healthy breakfast options including idli, dosa, and poha.</p>
+            </div>
+            <div class="service-box">
+                <img src="https://i.postimg.cc/Sx3J07J9/hyg.webp" alt="Hygienic Food Preparation">
+                <h3>Hygienic Food Preparation</h3>
+                <p>All food is prepared in a clean and hygienic environment to ensure safety and quality.</p>
+            </div>
+            <div class="service-box">
+                <img src="https://i.postimg.cc/ryrDycy0/logo.png" alt="Affordable Pricing">
+                <h3>Affordable Pricing</h3>
+                <p>Our canteen ensures that all meals and snacks are budget-friendly for students and staff.</p>
+            </div>
+            <div class="service-box">
+                <img src="https://i.postimg.cc/rFNBXhb0/e.jpg" alt="Stationery Items">
+                <h3>Stationery Items</h3>
+                <p>Essential stationery items such as notebooks, pens, and other supplies are available for students.</p>
+            </div>
+            
+            <div class="service-box">
+                <img src="https://i.postimg.cc/7hhkYdRZ/print.webp" alt="Print & Xerox Services">
+                <h3>Print & Xerox Services</h3>
+                <p>Convenient printing and photocopying services available for students and faculty.</p>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

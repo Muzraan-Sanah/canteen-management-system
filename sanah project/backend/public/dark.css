@@ -1,0 +1,114 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+/* Default Light Mode */
+.header, .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #ddd;  /* Light Gray */
+    color: #333;  /* Dark Text */
+    height: 60px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Dark Mode */
+ .dark-mode .nav {
+    background-color: #1e1e1e; /* Black */
+    color: #fff; /* Bright Text */
+}
+
+/* Logo */
+.logo img {
+    height: 65px; /* Increased size */
+    width: auto;
+}
+
+/* Navigation */
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+/* Link Colors */
+nav ul li a {
+    text-decoration: none;
+    color: #333; /* Dark text in light mode */
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.dark-mode nav ul li a {
+    color: #fff; /* Bright text in dark mode */
+}
+
+/* Hover Effect */
+nav ul li a:hover {
+    color: beige;
+}
+
+/* Mobile Menu Button */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: #333; /* Dark mode toggle button should also change */
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.dark-mode .menu-toggle {
+    color: azure;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    nav ul {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background: #ddd; /* Ensure mobile menu matches theme */
+        padding: 10px 0;
+    }
+
+    .dark-mode nav ul {
+        background: #111; /* Dark mode mobile menu */
+    }
+
+    nav ul li {
+        margin: 8px 0;
+    }
+
+    nav ul li a {
+        font-size: 18px;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    nav.open ul {
+        display: flex;
+    }
+    nav.open ul {
+        display: flex;
+    }
+}
+ 

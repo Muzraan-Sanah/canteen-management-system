@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>College Canteen</title>
+  <link rel="icon" type="image/png" sizes="194x194" href="https://i.postimg.cc/qBLNYw1g/icon-up.png">
+  <style>
+    /* 🌈 Animated Background */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb, #84fab0, #8fd3f4);
+      background-size: 400% 400%;
+      animation: animateBG 12s ease infinite;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes animateBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ✨ Floating Stars */
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.8;
+      animation: twinkle 6s infinite linear;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+
+    .stars-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    /* 💠 Container Styling */
+    .container {
+      z-index: 1;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      color: #1a1a1a;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: #1a1a1a;
+    }
+
+    .icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    p a {
+      display: inline-block;
+      margin: 10px;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      padding: 12px 26px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(108, 92, 231, 0.4);
+      transition: all 0.3s ease-in-out;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    p a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -75%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+      transform: skewX(-45deg);
+      transition: 0.5s;
+    }
+    
+    p a:hover::before {
+      left: 100%;
+    }
+    
+    p a:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(108, 92, 231, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <!-- 🌟 Floating Stars -->
+  <div class="stars-container" id="stars"></div>
+
+  <!-- 💠 Canteen UI -->
+  <div class="container">
+    <div class="icon">🍽️</div>
+    <h1>Welcome to the College Canteen</h1>
+    <p><a href="/chatgpt.html">Place an Order</a></p>
+  </div>
+
+  <!-- ✨ Star Generator Script -->
+  <script>
+    const starsContainer = document.getElementById("stars");
+    const starCount = 100;
+
+    for (let i = 0; i < starCount; i++) {
+      const star = document.createElement("div");
+      star.className = "star";
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.animationDuration = `${Math.random() * 5 + 3}s`;
+      star.style.opacity = `${Math.random()}`;
+      starsContainer.appendChild(star);
+    }
+  </script>
+</body>
+</html>

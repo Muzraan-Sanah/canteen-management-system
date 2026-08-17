@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - KITS Cantoche</title>
+    <link rel="icon" type="image/png" sizes="194x194" href="https://i.postimg.cc/qBLNYw1g/icon-up.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f8f9fa;
+            padding: 10px;
+        }
+        .banner {
+            width: 90%;
+            height: 250px;
+            border: 2px solid #1abc9c;
+            background: url('https://plus.unsplash.com/premium_photo-1663050786427-8d71c177946c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Y2FudGVlbnxlbnwwfHwwfHx8MA%3D%3D') no-repeat center center/cover;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            animation: fadeIn 1.5s ease-in-out;
+            alt: "Canteen Banner";
+        }
+        .header {
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            color:#333;
+            margin-bottom: 30px;
+            animation: slideDown 1s ease-in-out;
+        }
+        .container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            width: 90%;
+            margin-top: 15px;
+            flex-direction: column;
+        }
+        .box {
+            background: white;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            border: 2px solid #1abc9c;
+            border-radius: 15px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeIn 1s ease-in-out;
+            margin-bottom: 20px;
+        }
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        .box h2 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #1ABC9C;
+            color: white;
+            border: none;
+            text-align: center;
+            border-radius: 7px;
+            text-decoration: none;
+            font-size: 1.2em;
+            animation: slideDown 1s ease-in-out;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .button:hover {
+            background: #16A085;
+            transform: scale(1.05);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @media (min-width: 768px) {
+            .container {
+                flex-direction: row;
+            }
+            .box {
+                width: 28%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="banner"></div>
+    <h1 class="header"> Welcome to KITS Cantoche</h1>
+    <div class="container">
+        <div class="box">
+            <h2>Contact</h2>
+            <hr>
+            <br>
+            <p>Email: <a href="mailto:info@kitscantoche.com" style="color:#1ABC9C">info@kitscantoche.com</a></p>
+            <br>
+            <p>Phone: +91 98765 43210</p>
+        </div>
+        <div class="box">
+            <h2>Opening Hours</h2>
+            <hr>
+            <br>
+            <p>Monday - Saturday: 8 AM - 3 PM</p>
+            <br>
+            <p>During Events: 10 AM - 5 PM</p>
+        </div>
+        <div class="box">
+            <h2>Location</h2>
+            <hr>
+            <br>
+            <p>KITS Cantoche, KKR & KSR Institute of Technology and Sciences</p>
+            <br>
+            <p>Guntur, Andhra Pradesh, India</p>
+            <br>
+            <p>Pin Code: 522001</p>
+            <br>
+            <a href="https://www.google.com/maps/search/?api=1&query=KKR+%26+KSR+Institute+of+Technology+and+Sciences,+Guntur,+Andhra+Pradesh,+India" style="color:#1ABC9C" target="_blank">View on Google Maps</a>
+        </div>
+    </div>
+    <button class="button" onclick="window.location.href='mail.html'">Email Us</button>
+</body>
+</html>

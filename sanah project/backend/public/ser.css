@@ -1,0 +1,118 @@
+/* Container for the entire menu */
+.menu-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 60px;
+    padding: 20px;
+}
+
+/* Each individual menu item */
+.menu-item {
+    width: 200px; /* Container width */
+    height: 200px; /* Container height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease-in-out;
+}
+.menu-item:hover {
+    transform: translateY(-10px); /* Hover effect to lift the item */
+}
+
+/* Style for the images */
+.menu-img {
+    width: 100px; /* Maximum image width */
+    height: 100px; /* Maximum image height */
+    object-fit: cover; /* Ensures images maintain aspect ratio */
+    margin-bottom: 10px; /* Space between the image and text */
+    animation: rotateImage 3s linear infinite; 
+}
+
+
+/* Styling for the menu item text */
+.menu-item p {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+#container {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Center the content vertically */
+    padding: 20px;
+    margin: 30px 0;
+}
+#container {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Center the content vertically */
+    width: 100%; /* Ensure the container spans full width */
+    padding: 20px;
+    margin: 0; /* No extra margin */
+}
+.menu-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 60px;
+    padding: 20px;
+}
+
+/* Each individual menu item */
+.menu-item {
+    width: 200px; /* Container width */
+    height: 200px; /* Container height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s ease-in-out;
+}
+.menu-item:hover {
+    transform: translateY(-10px); /* Hover effect to lift the item */
+}
+
+/* Style for the images */
+.menu-img {
+    width: 100px; /* Maximum image width */
+    height: 100px; /* Maximum image height */
+    object-fit: cover; /* Ensures images maintain aspect ratio */
+    margin-bottom: 10px; /* Space between the image and text */
+    animation: rotateImage 3s linear infinite;
+}
+
+/* Styling for the menu item text */
+.menu-item p {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Container for centering the content */
+#container {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Center the content vertically */
+    padding: 20px;
+    margin: 30px 0;
+}
+#container {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Center the content vertically */
+    width: 100%; /* Ensure the container spans full width */
+    padding: 20px;
+    margin: 0; /* No extra margin */
+}

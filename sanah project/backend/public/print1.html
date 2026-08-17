@@ -1,0 +1,155 @@
+<<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Printing Services</title>
+  <link rel="icon" type="image/png" sizes="194x194" href="https://i.postimg.cc/qBLNYw1g/icon-up.png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+    }
+
+    .xerox-section {
+      max-width: 600px;
+      margin: auto;
+      padding: 30px;
+      background-color: #fff;
+      border: 2px solid #1abc9c;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 0.8s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .xerox-section h2 { margin-bottom: 15px; color: #333; }
+
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="file"] {
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #1abc9c;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s;
+    }
+
+    button:hover {
+      background-color: #16a085;
+      transform: scale(1.03);
+    }
+
+    #totalCost { font-weight: bold; color: #222; }
+  </style>
+</head>
+<body>
+
+<div class="xerox-section">
+  <h2>Xerox & Printing Services</h2>
+  <form id="printForm">
+    <input type="text" name="name" placeholder="Your Name" required />
+    <input type="email" name="email" placeholder="Your Email" required />
+
+    <label for="pages">Number of Pages to Print:</label>
+    <input type="number" name="pages" id="pages" min="1" placeholder="Enter pages" oninput="updateCost()" required />
+
+    <p id="totalCost">Total Cost: ₹0</p>
+
+    <label for="fileUpload">Upload PDF Files:</label>
+    <input type="file" id="fileUpload" name="files" accept=".pdf" multiple required />
+
+    <button type="submit">Submit & Add to Bill</button>
+    <button type="button" onclick="sendWhatsApp()">Upload via WhatsApp</button>
+  </form>
+</div>
+
+<script>
+  function updateCost() {
+    const pages = parseInt(document.getElementById("pages").value || 0);
+    const cost = pages * 2;
+    document.getElementById("totalCost").innerText = `Total Cost: ₹${cost}`;
+  }
+
+  document.getElementById("printForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const name = this.name.value.trim();
+    const email = this.email.value.trim();
+    const pages = parseInt(this.pages.value);
+    const files = document.getElementById("fileUpload").files;
+
+    if (!name || !email || isNaN(pages) || pages <= 0 || files.length === 0) {
+      alert("Please fill all fields correctly and upload at least one PDF file.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("pages", pages);
+    formData.append("total", pages * 2);
+
+    for (let file of files) {
+      formData.append("pdfs", file);
+    }
+
+    try {
+      const res = await fetch("/print-order", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const errorText = await res.text();
+        throw new Error(errorText);
+      }
+
+      const data = await res.json();
+      alert("Print order submitted successfully!");
+      window.location.href = "chatgpt.html";
+
+    } catch (err) {
+      alert("Failed to submit print order. " + err.message);
+      console.error(err);
+    }
+  });
+
+  function sendWhatsApp() {
+    const pages = parseInt(document.getElementById("pages").value || 0);
+    const name = document.querySelector('[name="name"]').value.trim();
+    const canteenNumber = "919876543210"; // Replace with your actual number
+
+    if (isNaN(pages) || pages <= 0 || name === "") {
+      alert("Please enter your name and valid number of pages.");
+      return;
+    }
+
+    const message = `Hello, I would like to print ${pages} pages.\nName: ${name}\nTotal Cost: ₹${pages * 2}`;
+    const url = `https://wa.me/${canteenNumber}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  }
+</script>
+
+</body>
+</html>

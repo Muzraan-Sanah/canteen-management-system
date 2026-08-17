@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Visit our canteen for delicious burgers, pizzas, and more. We are open Monday to Friday from 8 AM to 8 PM.">
+    <title>Canteen Services</title>
+    <link rel="icon" type="image/png" sizes="194x194" href="https://i.postimg.cc/qBLNYw1g/icon-up.png">1
+    <link rel="stylesheet" href="ser.css">
+    <style>
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .menu-item {
+            border: 2px solid #1abc9c;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 15px;
+            text-align: center;
+            background: #f9f9f9;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            height: 350px;
+        }
+        .menu-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .menu-item button {
+            padding: 6px 10px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.3s ease;
+            width: 45%;
+        }
+        .menu-item button:first-of-type {
+            background: linear-gradient(90deg, #28a745, #218838);
+            color: white;
+        }
+        .menu-item button:last-of-type {
+            background: linear-gradient(90deg, #dc3545, #a71d2a);
+            color: white;
+        }
+        .menu-item button:first-of-type:hover {
+            background: linear-gradient(90deg, #218838, #1e7e34); /* Darker green on hover */
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+        .menu-item button:last-of-type:hover{
+            background: linear-gradient(90deg, #a71d2a, #7a121c); /* Darker red on hover */
+            transform: scale(1.05);
+            opacity: 0.8;
+        }
+        #total {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+            color:#6f42c1;;
+        }
+        .submit-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 20px;
+            font-size: 18px;
+            background: linear-gradient(90deg, #007BFF, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        .submit-btn:hover {
+            background: linear-gradient(90deg, #0056b3, #003f7f);
+            transform: scale(1.05);
+        }
+        .clear-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 20px;
+            font-size: 18px;
+            background: linear-gradient(90deg, #6c757d, #545b62); 
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        .clear-btn:hover {
+            background: linear-gradient(90deg, #545b62, #3d444a);
+            transform: scale(1.05);
+        }
+        .printing-box {
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: auto;
+}
+.printing-box button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.printing-box button:hover {
+    background-color: #0056b3;
+}
+   
+
+    /* ✅ Floating Cart */
+    #floatingCart {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 250px;
+      background-color: white;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 15px;
+      font-family: Arial, sans-serif;
+      z-index: 1000;
+    }
+
+    #floatingCart h4 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    #cartList {
+      list-style: none;
+      padding-left: 0;
+      max-height: 150px;
+      overflow-y: auto;
+      margin: 0;
+      font-size: 14px;
+    }
+
+    #cartList li {
+      margin-bottom: 6px;
+    }
+
+    #cartTotal {
+      font-weight: bold;
+      font-size: 15px;
+      margin-top: 10px;
+    }
+
+    button.submit-btn {
+      margin-top: 10px;
+      width: 100%;
+      padding: 8px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button.submit-btn:hover {
+      background-color: #388e3c;
+    }
+    </style>
+    <script>
+            let cartTotal = 0;
+            let itemCount = 0;
+            let cartItems = {}; // itemName -> { price, quantity }
+          
+            function addToCart(itemName, price) {
+              cartTotal += price;
+              itemCount++;
+          
+              if (cartItems[itemName]) {
+                cartItems[itemName].quantity++;
+              } else {
+                cartItems[itemName] = { price: price, quantity: 1 };
+              }
+          
+              updateCartDisplay();
+            }
+          
+            function removeFromCart(itemName, price) {
+              if (cartItems[itemName] && cartItems[itemName].quantity > 0) {
+                cartTotal -= price;
+                itemCount--;
+          
+                if (cartItems[itemName].quantity > 1) {
+                  cartItems[itemName].quantity--;
+                } else {
+                  delete cartItems[itemName];
+                }
+          
+                updateCartDisplay();
+              } else {
+                alert("Item not found or already removed.");
+              }
+            }
+          
+            function updateCartDisplay() {
+              const cartList = document.getElementById("cartList");
+              const cartTotalBox = document.getElementById("cartTotal");
+              const floatingCart = document.getElementById("floatingCart");
+          
+              // Hide cart if empty
+              if (itemCount === 0) {
+                floatingCart.style.display = "none";
+                return;
+              }
+          
+              // Show cart
+              floatingCart.style.display = "block";
+          
+              cartList.innerHTML = "";
+          
+              Object.entries(cartItems).forEach(([itemName, data]) => {
+                const subtotal = data.quantity * data.price;
+                const li = document.createElement("li");
+                li.textContent = `${itemName} x${data.quantity} – ₹${subtotal}`;
+                cartList.appendChild(li);
+              });
+          
+              cartTotalBox.innerText = `Total: ₹${cartTotal}`;
+            }
+          
+            function clearCart() {
+              if (itemCount === 0) {
+                alert("Your cart is already empty!");
+                return;
+              }
+          
+              cartItems = {};
+              cartTotal = 0;
+              itemCount = 0;
+              updateCartDisplay();
+              alert("Your order has been cleared.");
+            }
+          
+            function submitOrder() {
+              if (itemCount === 0) {
+                alert("Your cart is empty! Please order something.");
+                return;
+              }
+          
+              const items = Object.keys(cartItems).map(itemName => ({
+                name: itemName,
+                quantity: cartItems[itemName].quantity,
+                price: cartItems[itemName].price
+              }));
+          
+              localStorage.setItem("cart", JSON.stringify(items));
+              localStorage.setItem("cartTotal", cartTotal.toString());
+          
+              alert("Order saved! Please proceed to the home page to confirm.");
+              window.location.href = "chatgpt.html";
+            }             
+</script>    
+</head>
+<body>
+    <header aria-label="Main header">
+        <h1 style="text-align: center;">Welcome to Our Canteen</h1>
+    </header>
+    <div id="floatingCart" style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 1000; background: white; border: 1px solid #ccc; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+        <h4>🛒 Your Cart</h4>
+        <ul id="cartList"></ul>
+        <p id="cartTotal">Total: ₹0</p>
+        <button class="submit-btn" onclick="submitOrder()">Order Now</button>
+        <button class="submit-btn" style="background-color: #e53935;" onclick="clearCart()">Clear Order</button>
+      </div>
+    
+    <section class="menu">
+        <h3 style="text-align:center;">Our Menu</h3>
+<p style="text-align: center;">Discover our delicious offerings!</p>
+
+                <div class="menu-container">
+                        <section id="menu">
+                            <h4 style="text-align:center;">Break Fast Menu</h4>
+                            <div class="menu-container">
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/4yPn9688/sambar.png" alt="Idli with Sambar" class="menu-img">
+                                    <p>Idli - ₹40</p>
+                                    <button onclick="addToCart('Idli', 40)">Add Idli</button>
+                                    <button onclick="removeFromCart(40)">Remove Idli</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/L582GrTT/vada.webp" alt="Medu Vada" class="menu-img">
+                                    <p>Medu Vada - ₹30</p>
+                                    <button onclick="addToCart('Medu Vada', 30)">Add Medu Vada</button>
+                                    <button onclick="removeFromCart('Medu Vada', 30)">Remove Medu Vada</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/k5yr9TDh/dosa.webp" alt="Masala Dosa" class="menu-img">
+                                    <p>Masala Dosa - ₹50</p>
+                                    <button onclick="addToCart('Masala Dosa', 50)">Add Masala Dosa</button>
+                                    <button onclick="removeFromCart('Masala Dosa', 50)">Remove Masala Dosa</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/CKStvbJC/pongal.webp" alt="Pongal" class="menu-img">
+                                    <p>Pongal - ₹45</p>
+                                    <button onclick="addToCart('Pongal', 45)">Add Pongal</button>
+                                    <button onclick="removeFromCart('Pongal', 45)">Remove Pongal</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/nc7pgYKN/upma.webp" alt="Upma" class="menu-img">
+                                    <p>Upma - ₹35</p>
+                                    <button onclick="addToCart('Upma', 35)">Add Upma</button>
+                                    <button onclick="removeFromCart('Upma', 35)">Remove Upma</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/wv7dVhTf/pesarattu.webp" alt="Pesarattu" class="menu-img">
+                                    <p>Pesarattu - ₹35</p>
+                                    <button onclick="addToCart('Pesarattu', 35)">Add Pesarattu</button>
+                                    <button onclick="removeFromCart('Pesarattu', 35)">Remove Pesarattu</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/wjg8PKjs/puri.webp" alt="Puri" class="menu-img">
+                                    <p>Puri - ₹30</p>
+                                    <button onclick="addToCart('Puri', 30)">Add Puri</button>
+                                    <button onclick="removeFromCart('Puri', 30)">Remove Puri</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/1z8W7Mwq/bonda.jpg" alt="Bonda" class="menu-img">
+                                    <p>Bonda - ₹35</p>
+                                    <button onclick="addToCart('Bonda', 35)">Add Bonda</button>
+                                    <button onclick="removeFromCart('Bonda', 35)">Remove Bonda</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/pLTkyk06/parota.jpg" alt="Parota" class="menu-img">
+                                    <p>Parota - ₹30</p>
+                                    <button onclick="addToCart('Parota', 30)">Add Parota</button>
+                                    <button onclick="removeFromCart('Parota', 30)">Remove Parota</button>
+                                </div>
+                            </div>
+                        </section>
+                    
+                        <!-- Lunch Menu Section -->
+                        <section id="menu">             
+                        <h1 style="text-align:center;">Lunch Menu</h1>
+                            <div class="menu-container">
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/RCWH3y9f/chicken.webp" alt="Chicken Curry" class="menu-img">
+                                    <p>Chicken Curry - ₹120</p>
+                                    <button onclick="addToCart('Chicken Curry', 120)">Add Chicken Curry</button>
+                                    <button onclick="removeFromCart('Chicken Curry', 120)">Remove Chicken Curry</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/W4pDsfXd/mutton.webp" alt="Mutton Curry" class="menu-img">
+                                    <p>Mutton Curry - ₹140</p>
+                                    <button onclick="addToCart('Mutton Curry', 140)">Add Mutton Curry</button>
+                                    <button onclick="removeFromCart('Mutton Curry', 140)">Remove Mutton Curry</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/CLHLdsZk/biryani.avif" alt="Biryani" class="menu-img">
+                                    <p>Biryani - ₹100</p>
+                                    <button onclick="addToCart('Biryani', 100)">Add Biryani</button>
+                                    <button onclick="removeFromCart('Biryani', 100)">Remove Biryani</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/Rh196v04/veg.webp" alt="Vegetable Rice" class="menu-img">
+                                    <p>Vegetable Rice - ₹90</p>
+                                    <button onclick="addToCart('Vegetable Rice', 90)">Add Vegetable Rice</button>
+                                    <button onclick="removeFromCart('Vegetable Rice', 90)">Remove Vegetable Rice</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/sxJdfKn2/rasam.jpg" alt="Rasam and rice" class="menu-img">
+                                    <p>Rasam and rice - ₹30</p>
+                                    <button onclick="addToCart('Rasam and rice', 30)">Add Rasam and rice</button>
+                                    <button onclick="removeFromCart('Rasam and rice', 30)">Remove Rasam and rice</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/KzXdnCwz/daal.jpg" alt="Daal and rice" class="menu-img">
+                                    <p>Daal and rice - ₹30</p>
+                                    <button onclick="addToCart('Daal and rice', 30)">Add Daal and rice</button>
+                                    <button onclick="removeFromCart('Daal and rice', 30)">Remove Daal and rice</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/v8tpVqzY/pulihora.jpg" alt="Pulihora" class="menu-img">
+                                    <p>Pulihora - ₹40</p>
+                                    <button onclick="addToCart('Pulihora', 40)">Add Pulihora</button>
+                                    <button onclick="removeFromCart('Pulihora', 40)">Remove Pulihora</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/m2dJdPJK/curd.jpg" alt="Curd Rice" class="menu-img">
+                                    <p>Curd Rice - ₹50</p>
+                                    <button onclick="addToCart('Curd Rice', 50)">Add Curd Rice</button>
+                                    <button onclick="removeFromCart('Curd Rice', 50)">Remove Curd Rice</button>
+                                </div>
+                                <div class="menu-item">
+                                    <img src="https://i.postimg.cc/L4xxSrD1/fish.jpg" alt="Fish Curry" class="menu-img">
+                                    <p>Fish Curry - ₹150</p>
+                                    <button onclick="addToCart('Fish Curry', 150)">Add Fish Curry</button>
+                                    <button onclick="removeFromCart('Fish Curry', 150)">Remove Fish Curry</button>
+                                </div>
+                            </div>
+                            </section>
+                            <section id="menu">
+                                <h1 style="text-align:center;">Snacks Menu</h1>
+                                <div class="menu-container">
+            <div class="menu-item">
+                <img src="https://aforappetite.com/wp-content/uploads/2021/07/egg-puffs-1024x678.jpg" alt="Egg Puff" class="menu-img">
+                <p>Egg Puff - ₹20</p>
+                <button onclick="addToCart('Egg Puff', 100)">Add Egg Puff</button>
+                <button onclick="removeFromCart('Egg Puff', 100)">Remove Egg Puff</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://www.siftandsimmer.com/wp-content/uploads/2022/04/curry-puffs-featured.jpg" alt="Curry Puff" class="menu-img">
+                <p>Curry Puff - ₹20</p>
+                <button onclick="addToCart('Curry Puff', 20)">Add Curry Puff</button>
+                <button onclick="removeFromCart('Curry Puff', 20)">Remove Curry Puff</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i0.wp.com/thetwincookingproject.net/wp-content/uploads/2020/06/Flaky-Chicken-Puff-Pastry-Puffs-10.jpg?resize=610%2C914&ssl=1" alt="Chicken Puff" class="menu-img">
+                <p>Chicken Puff- ₹40</p>
+                <button onclick="addToCart('Chicken Puff', 40)">Add Chicken Puff</button>
+                <button onclick="removeFromCart('Chicken Puff', 40)">Remove Chicken Puff</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://tastytreatbd.com/images/detailed/127/Pastry.jpg" alt="Pastery" class="menu-img">
+                <p>Chocolate Pastery- ₹60</p>
+                <button onclick="addToCart('Chocolate Pastery', 60)">Add Chocolate Pastery</button>
+                <button onclick="removeFromCart('Chocolate Pastery', 60)">Remove Chocolate Pastery</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/yxGhRCpp/straw.jpg" alt="Chocolates" class="menu-img">
+                <p>Straw Berry Pastery- ₹10</p>
+                <button onclick="addToCart('Straw Berry Pastery', 10)">Add Straw Berry Pastery</button>
+                <button onclick="removeFromCart('Straw Berry Pastery', 10)">Remove Straw Berry Pastery</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/kXVvmDD0/pine.avif" alt="Chocolates" class="menu-img">
+                <p>Pine Apple Pastery- ₹10</p>
+                <button onclick="addToCart('Pine Apple Pastery', 10)">Add Pine Apple Pastery</button>
+                <button onclick="removeFromCart('Pine Apple Pastery', 10)">Remove Pine Apple Pastery</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/N0VrbkkL/fivestar.jpg" alt="Chocolates" class="menu-img">
+                <p>Five Star- ₹10</p>
+                <button onclick="addToCart('Five Star', 10)">Add Five Star</button>
+                <button onclick="removeFromCart('Five Star', 10)">Remove Five Star</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/tRPpsN1D/perk.jpg" alt="Chocolates" class="menu-img">
+                <p>Perk- ₹10</p>
+                <button onclick="addToCart('Perk', 10)">Add Perk</button>
+                <button onclick="removeFromCart('Perk', 10)">Remove Perk</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/jSqbkVMk/munch.jpg" alt="Chocolates" class="menu-img">
+                <p>Munch- ₹10</p>
+                <button onclick="addToCart('Munch', 10)">Add Munch</button>
+                <button onclick="removeFromCart('Munch', 10)">Remove Munch</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/6pbDj82y/fuse.jpg" alt="Chocolates" class="menu-img">
+                <p>Fuse- ₹10</p>
+                <button onclick="addToCart('Fuse', 10)">Add Fuse</button>
+                <button onclick="removeFromCart('Fuse', 10)">Remove Fuse</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/hPS6KLVX/snick.jpg" alt="Chocolates" class="menu-img">
+                <p>Snickers- ₹10</p>
+                <button onclick="addToCart('Snickers', 10)">Add Snickers</button>
+                <button onclick="removeFromCart('Snickers', 10)">Remove Snickers</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhSgpmvH_eqZwvLJLpClck1c7pRNxivsAP6g&s" alt="Chocolates" class="menu-img">
+                <p>Tofis- ₹10</p>
+                <button onclick="addToCart('Tofis', 10)">Add Tofis</button>
+                <button onclick="removeFromCart('Tofis', 10)">Remove Tofis</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/WzsWbVFB/dairy.jpg" alt="Chocolates" class="menu-img">
+                <p>Dairy Milk- ₹10</p>
+                <button onclick="addToCart('Dairy Milk', 10)">Add Dairy Milk</button>
+                <button onclick="removeFromCart('Dairy Milk', 10)">Remove Dairy Milk</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/pLm0dqrL/sprite.jpg" alt="Cool Drinks" class="menu-img">
+                <p>Sprite- ₹60</p>
+                <button onclick="addToCart('Sprite',60)">Add Sprite</button>
+                <button onclick="removeFromCart('Sprite',60)">Remove Sprite</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZlXfNPoc_2Q9X251gHboxP81-KowChd3AMA&s" alt="Cool Drinks" class="menu-img">
+                <p>Thumps Up- ₹60</p>
+                <button onclick="addToCart('Thumps Up', 100)">Add Thumps Up</button>
+                <button onclick="removeFromCart('Thumps Up', 100)">Remove Thumps Up</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/CMJJHWfK/maaza.jpg" alt="Cool Drinks" class="menu-img">
+                <p>Maaza- ₹60</p>
+                <button onclick="addToCart('Maaza', 100)">Add Maaza</button>
+                <button onclick="removeFromCart('Maaza', 100)">Remove Maaza</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/3JVXt7r3/coca.jpg" alt="Cool Drinks" class="menu-img">
+                <p>Coca Cola- ₹60</p>
+                <button onclick="addToCart('Coca Cola', 60)">Add Coca Cola</button>
+                <button onclick="removeFromCart('Coca Cola', 60)">Remove Coca Cola</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/D0mGcptW/pepsi.jpg" alt="Cool Drinks" class="menu-img">
+                <p>Pepsi- ₹60</p>
+                <button onclick="addToCart('Pepsi', 60)">Add Pepsi</button>
+                <button onclick="removeFromCart('Pepsi', 60)">Remove Pepsi</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/kgWbwbhy/frooti.jpg" alt="Cool Drinks" class="menu-img">
+                <p>Frooti- ₹60</p>
+                <button onclick="addToCart('Frooti', 100)">Add Frooti</button>
+                <button onclick="removeFromCart('Frooti', 100)">Remove Frooti</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/90vDYmdS/badam.jpg" alt="Cool Drinks" class="menu-img">
+                <p>Baadam Milk- ₹60</p>
+                <button onclick="addToCart('Baadam Milk', 60)">Add Baadam Milk</button>
+                <button onclick="removeFromCart('Baadam Milk', 60)">Remove Baadam Milk</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/nV6Kkphp/butter.jpg" class="menu-img">
+                <p>Butter Milk- ₹60</p>
+                <button onclick="addToCart('Butter Milk', 60)">Add Butter Milk</button>
+                <button onclick="removeFromCart('Butter Milk', 60)">Remove Butter Milk</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/TwBbCJGC/lassi.jpg" alt="Cool Drinks" class="menu-img">
+                <p>Lassi- ₹60</p>
+                <button onclick="addToCart('Lassi', 60)">Add Lassi</button>
+                <button onclick="removeFromCart('Lassi', 60)">Remove Lassi</button>
+          </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/xCNJJNHH/marry.jpg" alt="Biscuits" class="menu-img">
+                <p>Marry Gold- ₹10</p>
+                <button onclick="addToCart('Marry Gold', 10)">Add Marry Gold</button>
+                <button onclick="removeFromCart('Marry Gold', 10)">Remove Marry Gold</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/t4Rz1Dgx/good.jpg" alt="Biscuits" class="menu-img">
+                <p>Good Day- ₹10</p>
+                <button onclick="addToCart('Good Day', 10)">Add Good Day</button>
+                <button onclick="removeFromCart('Good Day', 10)">Remove Good Day</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/G2vDgs2R/mom.jpg" alt="Biscuits" class="menu-img">
+                <p>Mom's Magic- ₹10</p>
+                <button onclick="addToCart('Moms Magic', 10)">Add Mom's Magic</button>
+                <button onclick="removeFromCart('Moms Magic', 10)">Remove Mom's Magic</button>
+            </div>
+            <div class="menu-item">
+                <img src="https://i.postimg.cc/dtV7rf8w/a.jpg" alt="Biscuits" class="menu-img">
+                <p>Waffer- ₹60</p>
+                <button onclick="addToCart('Waffer', 60)">Add Waffer</button>
+                <button onclick="removeFromCart('Waffer', 60)">Remove Waffer</button>
+            </div>
+        </div>
+        
+    </section>
+    <section id="menu">             
+        <h1 style="text-align:center;">Stationary Items</h1>
+            <div class="menu-container">
+                <div class="menu-item">
+                    <img src="https://i.postimg.cc/rFNBXhb0/e.jpg" alt="Pen set" class="menu-img">
+                    <p>Pen set contains : Blue pen, Black pen, Pencil, Eraser, Sharpner, Scale- ₹120</p>
+                    <button onclick="addToCart('Pen set', 120)">Add Pen set</button>
+                    <button onclick="removeFromCart('Pen set', 120)">Remove Pen set</button>
+                </div>
+                <div class="menu-item">
+                    <img src="https://i.postimg.cc/ZnKqP9vV/b.jpg" alt="Long White Notes" class="menu-img">
+                    <p>Long White Notes- ₹50</p>
+                    <button onclick="addToCart('Long White Notes', 50)">Add Long White Notes</button>
+                    <button onclick="removeFromCart('Long White Notes', 50)">Remove Long White Notes</button>
+                </div>
+                <div class="menu-item">
+                    <img src="https://i.postimg.cc/kGzdVDQV/c.jpg" alt="Short White Notes" class="menu-img">
+                    <p>Short White Notes- ₹30</p>
+                    <button onclick="addToCart('Short White Notes', 30)">Add Short White Notes</button>
+                    <button onclick="removeFromCart('Short White Notes', 30)">Remove Short White Notes</button>
+                </div>
+                <div class="menu-item">
+                    <img src="https://i.postimg.cc/76tFcbQB/d.jpg" alt="Rough Notes" class="menu-img">
+                    <p>Rough Notes- ₹20</p>
+                    <button onclick="addToCart('Rough Notes', 20)">Add Rough Notes</button>
+                    <button onclick="removeFromCart('Rough Notes', 20)">Remove Rough Notes</button>
+                </div>
+                
+                </div>
+                <div class="printing-box">
+                    <h2>Printing & Xerox Services</h2>
+                    <p>Print your documents easily. Click the button below to proceed.</p>
+                    <button onclick="location.href='print1.html'">Go to Printing Services</button>
+                </div>
+                </section>
+</body>
+</html>
+    
